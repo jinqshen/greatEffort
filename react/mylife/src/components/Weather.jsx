@@ -8,40 +8,45 @@ export default class Weather extends React.Component {
     constructor() {
         super();
         this.state = {
-            weather: []
+            weather: {},
+            list: []
         }
     }
 
     componentDidMount() {
-        axios.get('/Joke/QueryJokeByTime?key=dd765149e6ef45f08c1cacb0353f8f37&page=2&rows=10&sort=asc&time=1418745237')
+        const url = "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20";
+        /* axios.get(url)
         .then((res) => {
-            console.log(res.result);
+            console.log(res);
             this.setState({
-                weather: res.result
+                list: res.data.result
             });
-        });
-        /* $.ajax({ 
-            url:"/app/Weather/Query?key=1dcd916cdd454313ace370882625a0ab&cityname=成都", 
+        }); */
+        $.ajax({ 
+            url:url, 
             type:'GET', 
-            dataType:'JSON',  // 处理Ajax跨域问题
-            success: function(res){ 
+            dataType:'jsonp',  // 处理Ajax跨域问题
+            success: (res) => { 
+                console.log(res);
                 this.setState({
-                    weather: res.result.weather
+                    list: res.result
                 }); 
             } 
-        });  */
+        }); 
     }
 
     render() {
-        if (this.state.weather.length === 0) {
+       
             return <div>
-                  <p>成都天气</p>{}
-               </div>;
-        }else {
-            return <div>
-                  <p>成都天气</p>{this.state.weather[0].content}
+                  <p>成都天气</p>
+                  <ul>
+                    { this.state.list.length === 0 ? '' :
+                        this.state.list.map((value,key)=>{
+                            return <li key={key}>{value.title}</li>
+                        })
+                    }
+                </ul>
                </div>;
         }
         
-    }
 }
