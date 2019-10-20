@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter, Route, Link} from 'react-router-dom';
 import './index.css';
 import App from './components/App.jsx';
 import * as serviceWorker from './serviceWorker';
