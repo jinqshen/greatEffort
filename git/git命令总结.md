@@ -34,11 +34,17 @@
 
 `git checkout <branchName>`：切换到指定分支  `-b`参数表示创建并切换到该分支
 
+`git branch`：查看分支，`-a`查看所有本地与远程分支，`-r`查看所有远程分支
+
 `git branch <branchName>`：创建分支
+
+`git push origin <branchName>`：可创建远程分支
 
 `git branch -d <branchName>`：删除分支
 
 `git branch -D <branchName>`：强制删除未合并的分支
+
+`git push origin :<branchName>`：删除远程分支，需要先删除本地分支
 
 `git merge <branchName>`：合并分支到当前分支
 
