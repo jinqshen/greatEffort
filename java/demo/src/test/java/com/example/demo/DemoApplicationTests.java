@@ -10,9 +10,9 @@ class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {
-		String appId = "fsg_bpit_lvzhou";
-		String appKey = "aqMqaQo2cvQcpRTg";
-		String phoneNumber = "15183345760";
+		String appId = "appid";
+		String appKey = "appkey";
+		String phoneNumber = "xxxxxxxxx";
 		String smsContent = "测试短信呀";
 		int code = BaiduSmsUtils.sendNoteByBaidu(appId, appKey, phoneNumber, smsContent);
 		System.out.println(code);
