@@ -126,6 +126,7 @@
   - `--since`:显示某个开始时间的所有日志
   - `-t`:显示时间戳
   - `--tail`:仅列出最新N条容器日志
+  tip:查看日志的位置:`docker inspect --format='{{.LogPath}}' <containerName>`
 
 - `docker wait <options> <containerName>`阻塞运行直到容器停止，然后打印出他的退出代码
 
@@ -149,3 +150,152 @@
   - `-p`:在`commit`时，将容器暂停
 
 - `docker cp <options> <containerName>`
+- `options`:
+  - `-L`:保持源目标中的链接
+- `dicker diff <options> <containerName>`检查容器里文件结构的更改
+
+##### 镜像仓库
+
+- `docker login <options> <server>`登录到一个Docker镜像仓库，如果未指定镜像仓库地址，默认DockerHub
+
+  `options`:
+
+  - `-u`:登录的用户名
+  - `-p`:登录的密码
+
+- `docker logout <options> <server>`登录到一个Docker镜像仓库，如果未指定镜像仓库地址，默认DockerHub
+
+  登录:`docker login -u xxx -p xxx`
+
+  登出:`docker logout`
+
+- `docker pull <options> <name:tag>`从镜像仓库拉取或者更新指定镜像
+
+  `options`:
+
+  - `-a`:拉取所有的tagged镜像
+  - `--disable-content-trust`:忽略镜像的校验，默认开启
+
+- `docker push <options> <name:tag>`将本地的镜像上传到镜像仓库，要先登录到镜像仓库
+
+  `options`:
+
+  - `--disable-content-trust`:忽略镜像的校验，默认开启
+
+- `docker search <options> <name>`从Docker Hub查找镜像
+
+  `options`:
+
+  - `--automated`:只列出automated build类型的镜像
+  - `--no-trunc`:显示完整的镜像描述
+  - `-s`:列出收藏数不小于指定值的镜像
+
+| 列名        | 描述               |
+| ----------- | ------------------ |
+| NAME        | 镜像仓库源的名称   |
+| DESCRIPTION | 镜像的描述         |
+| OFFICIAL    | 是否docker官方发布 |
+| STARS       | 点赞数             |
+| AUTOMATED   | 自动构建           |
+
+##### 本地镜像管理
+
+- `docker images <options> <repository:tag>`列出本地镜像
+
+  `options`:
+
+  - `-a`:列出本地所有的镜像(含中间映像层，默认情况下，过滤掉中间映像层)
+  - `--digests`:显示镜像的摘要信息
+  - `-f`:显示满足条件的镜像
+  - `--format`:指定返回值的模板文件
+  - `--no-trunc`:显示完整的镜像信息
+  - `-q`:只显示镜像ID
+
+- `docker rmi <options> <imageName>`删除本地一个或多个镜像
+
+  `options`:
+
+  - `-f`:强制删除
+  - `--no-prune`:不移除该镜像的过程镜像，默认移除
+
+- `docker tag <options> <image:tag> <repository:tag>`标记本地镜像，将其归入某一仓库
+
+- `docker build <options> <path|url>`用于使用Dockerfile创建镜像
+
+  `options`:
+
+  - `--build-arg=[]`:设置镜像创建时的变量
+  - `--cpu-shares`:设置cpu使用权重
+  - `--cpu-period`:限制cpu cfs周期
+  - `--cpu-quota`:限制cpu cfs配额
+  - `--cpuset-cpus`:指定使用的cpu id
+  - `--cpuset-mems`:指定使用的内存id
+  - `--disable-content-trust`:忽略校验，默认开启
+  - `-f`:指定要使用的Dockerfile路径
+  - `--force-rm`:设置镜像过程中删除中间容器
+  - `--isolation`:使用容器隔离技术
+  - `--label=[]`:设置镜像使用的元数据
+  - `-m`:设置内存的最大值
+  - `--memory-swap`:设置swap的最大值为内存+swap，"-1"表示不限swap
+  - `--no-cache`:创建镜像的过程不使用缓存
+  - `--pull`:尝试去更新镜像的新版本
+  - `--quiet,-q`:安静模式，成功后只输出镜像ID
+  - `--rm`:设置镜像成功后删除中间容器
+  - `--shm-size`:设置/dev/shm的大小，默认值是64M
+  - `-ulimit`:Ulimit配置
+  - `--tag,-t`:镜像的名字及标签，通常为name:tag或name格式
+  - `--network`:默认default。在构建期间设置RUN指令的网络模式
+
+  实例:
+
+  使用url的Dockerfile创建镜像
+
+  `docker build github.com/creack/docker-firefox`
+
+  指定Dockerfile文件的位置
+
+  `docker build -f /path/to/a/Dockerfile .`
+
+- `docker history <options> <image>`:查看镜像的创建历史
+
+  `options`:
+
+  - `-H`:以可读的格式打印镜像大小和日期，默认为true
+  - `--no-trunc`:显示完整的提交记录
+  - `-q`:进列出提交记录ID
+
+- `docker save <options> <image>`将指定一个或多个镜像保存成tar归档文件
+
+  `options`:
+
+  - `-o`:输出到文件
+
+  实例
+
+  将镜像runoob/ubuntu:v3生成my_ubuntu_v3.tar文档
+
+  `docker save -o my_ubuntu_v3.tar runoob/ubuntu:v3`
+
+- `docker load <options>`:导入使用`docker save`命令导出的镜像
+
+  `options`:
+
+  - `--input, -i`:指定导入的文件，代替STDIN
+  - `--quiet, -q`:精简输出信息
+
+- `docker import <options> <file|url> <repository:tag>`从归档文件中创建镜像
+
+  `options`:
+
+  - `-c`:应用docker指令创建镜像
+  - `-m`:提交时的说明文字
+
+##### info|version
+
+- `docker info <options>`查看docker的系统信息
+
+- `docker version <options>`显示docker版本信息
+
+  `options`:
+
+  - `-f`:指定返回值的模板文件
