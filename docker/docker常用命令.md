@@ -118,7 +118,7 @@
   - `--since`:从指定的时间戳后显示所有事件
   - `--until`:流水事件显示到指定的时间为止
 
-- `docker logs <options> <containerName>`获取容器的日志
+- `docker logs <options> <containerName>`获取容器的日志 tip:查看日志的位置:`docker inspect --format='{{.LogPath}}' <containerName>`
 
   `options`:
 
@@ -126,7 +126,6 @@
   - `--since`:显示某个开始时间的所有日志
   - `-t`:显示时间戳
   - `--tail`:仅列出最新N条容器日志
-  tip:查看日志的位置:`docker inspect --format='{{.LogPath}}' <containerName>`
 
 - `docker wait <options> <containerName>`阻塞运行直到容器停止，然后打印出他的退出代码
 
