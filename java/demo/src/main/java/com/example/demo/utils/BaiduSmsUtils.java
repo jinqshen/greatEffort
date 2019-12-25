@@ -1,5 +1,6 @@
 package com.example.demo.utils;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -11,23 +12,30 @@ public class BaiduSmsUtils {
 
 	public static final String baiduSmsUrl = "https://rd-reach-service.duxiaoman.com/api/notification/v1/sendSms";
 	
-	public static int sendNoteByBaidu(String appId, String appKey, String phoneNumber, String smsContent) {
+	public static JSONObject sendNoteByBaidu(String appId, String appKey, String phoneNumber, String smsContent) {
 		JSONObject obj = new JSONObject();
-		obj.put("content", smsContent);
+		String contentTmp = "{'tpl_id':'network_anomaly_alarm','params':{'content':'" + smsContent + "'}}";
+		obj.put("content", contentTmp);
+		obj.put("sms_type", 4);
+		obj.put("content_type", 2);
 		obj.put("dest_type", 2);
 		obj.put("dest", phoneNumber);
 		Long timestamp = new Date().getTime()/1000;
 		obj.put("_sign", getSign(obj, appId, appKey, timestamp));
 		obj.put("_timestamp", timestamp);
 		obj.put("_appid", appId);
-		System.out.println(obj.toString());
-		Long aLong = (long) 1572331977;
-		String a = getSign(obj, appId, appKey, aLong);
-		System.out.println(a);
-		JSONObject resJson = HttpClientUtils.doPoststr(baiduSmsUrl, obj.toString());
-		return resJson.getInt("code");
+		JSONObject resJson = HttpClientUtils.doPoststr(baiduSmsUrl, http_build_query(obj));
+		return resJson;
 	}
 	
+	/**
+	 * 获取签名
+	 * @param obj
+	 * @param appId
+	 * @param appKey
+	 * @param timestamp
+	 * @return
+	 */
 	private static String getSign(JSONObject obj, String appId, String appKey, Long timestamp) {
 		String sign = "";
 		Iterator iterator = obj.keys();
@@ -46,9 +54,32 @@ public class BaiduSmsUtils {
 			sign += key + "=" + object.get(key) + "&";
 		}
 		sign = sign.substring(0, sign.length() - 1);
-		sign += "." + appId + "." + appKey + "." + timestamp;
+		sign += "." + appId + "." + timestamp + "." + appKey;
 		System.out.println(sign);
 		sign = SHA1Utils.encode(sign);
-		return sign;
+		return sign.toLowerCase();
+	}
+	
+	/**
+	 * 实现php的http_build_query方法
+	 * @param jsonObject
+	 * @return
+	 */
+	private static String http_build_query(JSONObject jsonObject) {
+		String str = "";
+		Iterator iterator = jsonObject.keys();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			str += key + "=" + jsonObject.get(key) + "&";
+		}
+		str = str.substring(0, str.length() - 1);
+		try {
+			str = URLEncoder.encode(str, "utf-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		str = str.replace("%3D", "=").replace("%26", "&");
+		return str;
 	}
 }

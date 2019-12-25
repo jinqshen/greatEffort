@@ -35,12 +35,19 @@ public class HttpClientUtils {
 	public static JSONObject doPoststr(String url,String outStr){
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
-		JSONObject jsonObject = null;
+		JSONObject jsonObject = new JSONObject();
 		try {
 			httpPost.setEntity(new StringEntity(outStr, "utf-8"));
+			httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			String result = EntityUtils.toString(response.getEntity(),"utf-8");
-		    jsonObject =JSONObject.fromObject(result);
+			if(result.equals("")) {
+				jsonObject.put("code", 0);
+				jsonObject.put("errcode", 0);
+				jsonObject.put("msg", "OK");
+			}else {
+				jsonObject =JSONObject.fromObject(result);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
