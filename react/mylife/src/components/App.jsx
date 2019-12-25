@@ -2,6 +2,7 @@ import React from 'react';
 import {HashRouter, Route, Link} from 'react-router-dom';
 import Weather from './Weather';
 import DevInfo from './DevInfo';
+import King from './King';
 import '_bootstrap@4.3.1@bootstrap/dist/css/bootstrap.css';
 import '../css/App.scss';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
@@ -37,6 +38,10 @@ export default class App extends React.Component {
               <Menu.Item key="2">
                 <Icon type="desktop" />
                 <Link id="tlink2" to="/weather">天气</Link>
+              </Menu.Item>
+              <Menu.Item key="3">
+                <Icon type="desktop" />
+                <Link id="tlink3" to="/king">英雄</Link>
               </Menu.Item>
               <SubMenu
                 key="sub1"
@@ -79,6 +84,7 @@ export default class App extends React.Component {
               <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
                 <Route path="/devInfo" component={ DevInfo }></Route>
                 <Route path="/weather" component={ Weather }></Route>
+                <Route path="/king" component={ King }></Route>
               </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
